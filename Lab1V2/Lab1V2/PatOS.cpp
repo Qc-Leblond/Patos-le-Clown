@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "Ordonnanceur.h"
+#include "Processus.h"
 using namespace std;
 
 
@@ -117,12 +118,13 @@ void loadProgram(char* fileName);
 
 
 CProcesseur CPU;
+vector<Processus> processus;
 
 
-int main(/* int nbr, char ** fileName*/)
+int main( int nbr, char ** fileName)
 {
 	Ordonnanceur* ordonnanceur = new Ordonnanceur();
-	/*if (nbr < 2)
+	if (nbr < 2)
 	{
 		cout << "ExecPatOS.exe [nomDufichier.txt]" << endl;
 		exit(-1);
@@ -132,11 +134,20 @@ int main(/* int nbr, char ** fileName*/)
 
 	CPU.setPC(0);
 	CPU.setRegistre(0);
+	
+	while (!CheckIfAllProcessusCompleted()) 
+	{
+		int processusID = ordonnanceur->ChooseProcessus(processus);
+		for (int i = 0; i < 2; i++)
+		{
+			if (CPU.retState() != 'E')
+			{
+				CPU.run();
+			}
+		}
+	}
 
-	while (CPU.retState() == 'E')
-		CPU.run();
-
-	cout << "fin normal" << endl;*/
+	cout << "fin normal" << endl;
 
 	return 0;
 }
@@ -155,3 +166,11 @@ void loadProgram(char* fileName)
 	}
 	file.close();
 }
+
+bool CheckIfAllProcessusCompleted()
+{
+	for (int i = 0; i < processus.size(); i++)
+		if (processus.at(i).GetState() != 'E') return false;
+
+	return true;
+} 

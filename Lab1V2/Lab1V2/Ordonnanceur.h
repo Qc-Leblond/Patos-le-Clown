@@ -19,9 +19,8 @@ class Ordonnanceur
 	vector<ProcessusTicket> processusList;
 
 public:
-	Ordonnanceur(vector<int>);
 	Ordonnanceur();
 	~Ordonnanceur(void);
-	int ChooseProcessus(void);
+	int ChooseProcessus(vector<Processus>);
 };
 
