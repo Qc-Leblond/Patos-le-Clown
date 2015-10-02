@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -23,7 +24,7 @@ class Processus
 	int 				Priorite;
 	CHAR				Registre;
 	CHAR				PC;				// Compteur ordinal
-	CHAR*				State;
+	CHAR				State;
 
 public:
 
@@ -32,7 +33,7 @@ public:
 
 	void setRegistre(CHAR reg) { Registre = reg; }
 	void setPC(CHAR pc) { PC = pc; }
-	void setState(CHAR* state) { State = state; }
+	void setState(CHAR state) { State = state; }
 	void setPriorite(int priorite) { Priorite = priorite; }
 
 

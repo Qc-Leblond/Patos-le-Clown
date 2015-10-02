@@ -5,6 +5,7 @@
 
 #include "Processus.h"
 #include "Ordonnanceur.h"
+#include "GestionnaireMemoire.h"
 using namespace std;
 
 
@@ -125,8 +126,9 @@ vector<Processus*> processus;
 int main(int nbr, char ** fileName)
 {
 	Ordonnanceur* ordonnanceur = new Ordonnanceur();
-	ofstream disque;
-	disque.open("memoire.txt", ios::out);
+	GestionnaireMemoire *gestionnaireMemoire = new GestionnaireMemoire();
+
+	string diskFilename = "memoire.txt";
 
 	//missing filename arguments
 	if (nbr < 2)
@@ -151,23 +153,9 @@ int main(int nbr, char ** fileName)
 		processus.push_back(p);
 
 		//get memory from process and put it on "disk" (a text file)
-		ifstream file;
-		file.open(fileName[i], ios::in);
-		int lineCount = 0;
-		for (int j = 0; j < TAILLE * 2; j++)
-		{
-			string line;
-			file >> line;
-			//skip the first 32 lines (the instructions)
-			if (lineCount >= 32)
-			{
-				disque << line + '\n';
-			}
-			lineCount++;
-		}
-		file.close();
+		gestionnaireMemoire->putMemoryOnDiskFrom(fileName[i], diskFilename, TAILLE);
 	}
-	disque.flush();
+	
 
 
 	loadProgram(fileName[1]);
@@ -180,7 +168,6 @@ int main(int nbr, char ** fileName)
 
 	cout << "fin normal" << endl;
 
-	disque.close();
 	return 0;
 }
 
