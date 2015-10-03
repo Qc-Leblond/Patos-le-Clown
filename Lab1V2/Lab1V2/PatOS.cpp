@@ -37,6 +37,7 @@ public:
 	CHAR	retPC()						{ return PC; }
 	CHAR	retRegistre()				{ return Registre; }
 	CHAR	retState()					{ return State; }
+	CHAR*	retRAM()					{ return RAM;  }
 	void setPC(CHAR pc)					{ PC = pc; }
 	void setRegistre(CHAR registre)		{ Registre = registre; }
 	void setState(CHAR state)			{ State = state; }
@@ -158,8 +159,7 @@ int main(int nbr, char ** fileName)
 		gestionnaireMemoire->putMemoryOnDiskFrom(fileName[i], diskFilename, TAILLE);
 	}
 	
-
-
+	
 	loadProgram(fileName[1]);
 
 	CPU.setPC(0);
@@ -175,6 +175,8 @@ int main(int nbr, char ** fileName)
 				CPU.run();
 			}
 		}
+		//update the process' memory
+		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID], CPU.retRAM());
 	}
 
 	cout << "fin normal" << endl;

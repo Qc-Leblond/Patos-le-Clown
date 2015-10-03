@@ -14,16 +14,13 @@ void Processus::eraseMemoryChanges()
 * Would be more efficient from instructions, but also more complex...
 * needs to be able to take any length of memory, from 32B to 4GB
 */
-void Processus::setChangementsMemoire(/*CHAR* ram*/) //TODO: take next instructions as param instead?
+void Processus::setChangementMemoire(int _indice, CHAR _valeur) //TODO: take next instructions as param instead?
 {
 	eraseMemoryChanges();
-	while (false) //TODO: which condition?
-	{
-		memoryTuple memChange;
-		memChange.indice = 000; //TODO
-		memChange.valeur = 111; //TODO
-		MemoireModifiee.push_back(memChange);
-	}
+	memoryTuple memChange;
+	memChange.indice = _indice;
+	memChange.valeur = _valeur; 
+	MemoireModifiee.push_back(memChange);
 }
 
 /*
