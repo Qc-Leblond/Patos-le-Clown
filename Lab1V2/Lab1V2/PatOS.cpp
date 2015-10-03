@@ -158,23 +158,23 @@ int main(int nbr, char ** fileName)
 		gestionnaireMemoire->putMemoryOnDiskFrom(fileName[i], diskFilename, TAILLE);
 	}
 	
-
-
-	loadProgram(fileName[1]);
-
-	CPU.setPC(0);
-	CPU.setRegistre(0);
-	
 	while (!CheckIfAllProcessusCompleted()) 
 	{
 		int processusID = ordonnanceur->ChooseProcessus(processus);
+		loadProgram(fileName[processusID+1]);
+		CPU.setPC(processus[processusID]->getPC());
+		CPU.setRegistre(processus[processusID]->getRegistre());
+
 		for (int i = 0; i < 2; i++)
 		{
-			if (CPU.retState() != 'E')
+			if (CPU.retState() == 'E')
 			{
 				CPU.run();
 			}
 		}
+
+		processus[processusID]->setPC(CPU.retPC());
+		processus[processusID]->setRegistre(CPU.retRegistre());
 	}
 
 	cout << "fin normal" << endl;
@@ -201,7 +201,7 @@ void loadProgram(char* fileName)
 bool CheckIfAllProcessusCompleted()
 {
 	for (int i = 0; i < processus.size(); i++)
-		if (processus.at(i)->GetState() != 'E') return false;
+		if (processus.at(i)->GetState() == 'E') return false;
 
 	return true;
 } 

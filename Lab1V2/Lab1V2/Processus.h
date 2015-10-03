@@ -39,6 +39,8 @@ public:
 
 	int GetPriorite() {return Priorite;}
 	CHAR GetState() {return State;}
+	CHAR getRegistre() {return Registre;}
+	CHAR getPC() {return PC;}
 
 	void eraseMemoryChanges();
 
