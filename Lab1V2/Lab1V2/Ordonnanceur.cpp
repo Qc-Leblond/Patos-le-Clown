@@ -10,7 +10,7 @@ Ordonnanceur::Ordonnanceur()
 }
 
 /// <return> the ID of the chosen processus <return>
-int Ordonnanceur::ChooseProcessus(vector<Processus> processus)
+int Ordonnanceur::ChooseProcessus(vector<Processus*> processus)
 {
 	vector<int> lotery;
 
@@ -18,7 +18,7 @@ int Ordonnanceur::ChooseProcessus(vector<Processus> processus)
 	for (int i = 0; i < processus.size(); i++)
 	{
 		///TODO if processus not blocked
-		for (int j = 0; j < processus.at(i).GetPriorite(); j++)
+		for (int j = 0; j < processus.at(i)->GetPriorite(); j++)
 		{
 			lotery.push_back(i);
 		}
@@ -32,12 +32,12 @@ int Ordonnanceur::ChooseProcessus(vector<Processus> processus)
 		//Add to the priority if the random does not choose him (to give the processus more chances on next pass)
 		if (i != resultID)
 		{
-			processus.at(i).AddToPriorite(1);
+			processus.at(i)->AddToPriorite(1);
 		}
 		//Reset priority if chosen
 		else
 		{
-			processus.at(i).setPriorite(1);
+			processus.at(i)->setPriorite(1);
 		}
 	}
 

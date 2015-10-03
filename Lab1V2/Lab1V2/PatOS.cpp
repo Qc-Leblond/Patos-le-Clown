@@ -12,6 +12,8 @@ using namespace std;
 #define CHAR unsigned char
 const int TAILLE = 32;
 
+bool CheckIfAllProcessusCompleted();
+
 
 class CProcesseur
 {
@@ -199,7 +201,7 @@ void loadProgram(char* fileName)
 bool CheckIfAllProcessusCompleted()
 {
 	for (int i = 0; i < processus.size(); i++)
-		if (processus.at(i).GetState() != 'E') return false;
+		if (processus.at(i)->GetState() != 'E') return false;
 
 	return true;
 } 
