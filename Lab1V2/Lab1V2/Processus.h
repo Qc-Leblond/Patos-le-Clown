@@ -29,7 +29,7 @@ class Processus
 public:
 
 	Processus() {}
-	~Processus() {} //may cause error
+	~Processus() {}
 
 	void setRegistre(CHAR reg) { Registre = reg; }
 	void setPC(CHAR pc) { PC = pc; }
@@ -44,7 +44,7 @@ public:
 
 	void eraseMemoryChanges();
 
-	void setChangementsMemoire(/*CHAR* ram*/);
+	void setChangementMemoire(int indice, CHAR valeur);
 
 	vector<memoryTuple> getChangementsMemoire();
 

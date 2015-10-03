@@ -37,6 +37,7 @@ public:
 	CHAR	retPC()						{ return PC; }
 	CHAR	retRegistre()				{ return Registre; }
 	CHAR	retState()					{ return State; }
+	CHAR*	retRAM()					{ return RAM;  }
 	void setPC(CHAR pc)					{ PC = pc; }
 	void setRegistre(CHAR registre)		{ Registre = registre; }
 	void setState(CHAR state)			{ State = state; }
@@ -157,7 +158,7 @@ int main(int nbr, char ** fileName)
 		//get memory from process and put it on "disk" (a text file)
 		gestionnaireMemoire->putMemoryOnDiskFrom(fileName[i], diskFilename, TAILLE);
 	}
-	
+
 	while (!CheckIfAllProcessusCompleted()) 
 	{
 		int processusID = ordonnanceur->ChooseProcessus(processus);
@@ -172,6 +173,8 @@ int main(int nbr, char ** fileName)
 				CPU.run();
 			}
 		}
+		//update the process' memory
+		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID], CPU.retRAM());
 
 		processus[processusID]->setPC(CPU.retPC());
 		processus[processusID]->setRegistre(CPU.retRegistre());

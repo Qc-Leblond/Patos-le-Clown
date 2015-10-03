@@ -23,11 +23,10 @@ void GestionnaireMemoire::putMemoryOnDiskFrom(string processFilename, string dis
 		string line;
 		file >> line;
 		//skip the first 32 lines (the instructions)
-		if (lineCount >= 32)
+		if (j >= 32)
 		{
 			disque << line + '\n';
 		}
-		lineCount++;
 	}
 	file.close();
 	disque.flush();
@@ -35,14 +34,40 @@ void GestionnaireMemoire::putMemoryOnDiskFrom(string processFilename, string dis
 	return;
 }
 
-void GestionnaireMemoire::updateProcessMemoryOnDisk(string diskFilename, Processus process)
+void GestionnaireMemoire::updateProcessMemoryOnDisk(string diskFilename, Processus* process)
 {
-	//TODO
+	vector<memoryTuple> memChanges = process->getChangementsMemoire();
+	for (int i = 0; i < memChanges.size(); i++)
+	{
+
+	}
 	return;
 }
 
-void GestionnaireMemoire::updateProcessMemoryModifications(string processFilename, Processus process)
+void GestionnaireMemoire::updateProcessMemoryModifications(string processFilename, Processus process, CHAR* RAM)
 {
-	//TODO
+	ifstream file;
+	file.open(processFilename, ios::in);
+
+	int lineCount = 0;
+	for (int j = 0; j < 64; j++)
+	{
+		CHAR line;
+		file >> line;
+		//skip the first 32 lines (the instructions)
+		if (j >= 32)
+		{
+			if (line != RAM[j])
+			{
+				//add a memory change to the process
+				process.setChangementMemoire(j, RAM[j]);
+			}
+		}
+	}
+	file.close();
+
+
+
+
 	return;
 }
