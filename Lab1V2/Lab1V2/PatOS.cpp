@@ -12,9 +12,6 @@ using namespace std;
 #define CHAR unsigned char
 const int TAILLE = 32;
 
-bool CheckIfAllProcessusCompleted();
-
-
 class CProcesseur
 {
 	CHAR*			RAM;
@@ -120,7 +117,8 @@ public:
 
 
 // Prototype des fonctions
-void loadProgram(char* fileName);
+void loadProgram(char* fileName, string diskName);
+bool CheckIfAllProcessusCompleted();
 
 
 CProcesseur CPU;
@@ -162,7 +160,7 @@ int main(int nbr, char ** fileName)
 	while (!CheckIfAllProcessusCompleted()) 
 	{
 		int processusID = ordonnanceur->ChooseProcessus(processus);
-		loadProgram(fileName[processusID+1]);
+		loadProgram(fileName[processusID+1], diskFilename);
 		CPU.setPC(processus[processusID]->getPC());
 		CPU.setRegistre(processus[processusID]->getRegistre());
 
@@ -174,7 +172,7 @@ int main(int nbr, char ** fileName)
 			}
 		}
 		//update the process' memory
-		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID], CPU.retRAM());
+		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID]);
 
 		processus[processusID]->setPC(CPU.retPC());
 		processus[processusID]->setRegistre(CPU.retRegistre());
@@ -186,19 +184,45 @@ int main(int nbr, char ** fileName)
 }
 
 
-void loadProgram(char* fileName)
+void loadProgram(char* fileName, string diskName, int processusID)
 {
 	ifstream file(fileName);
 
-	int indice = 0;
-	while (!file.eof())
+	//Load the processus instruction
+	for (int i = 0; i < 32; i++)
 	{
 		int tamp = 0;
 		file >> tamp;
-		CPU.setRAM(indice, (CHAR)tamp);
-		indice++;
+		CPU.setRAM(i, (CHAR)tamp);
 	}
+
 	file.close();
+
+	ifstream disk(diskName);
+
+	bool loaded = false;
+	int index = 0;
+	//Load memory from disk
+	while (!loaded) {
+		//Get to the right part of the memory
+		int tamp = 0;
+		index++;
+		disk >> tamp;
+
+		//When to the right part load memory to RAM
+		if (index == 32 * processusID)
+		{
+			for (int i = 0; i < 32; i++)
+			{
+				disk >> tamp;
+				CPU.setRAM(i + 32, (CHAR)tamp);
+			}
+
+			loaded = true;
+		}
+	}
+
+	disk.close();
 }
 
 bool CheckIfAllProcessusCompleted()
