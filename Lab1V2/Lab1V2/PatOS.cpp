@@ -12,6 +12,8 @@ using namespace std;
 #define CHAR unsigned char
 const int TAILLE = 32;
 
+bool CheckIfAllProcessusCompleted();
+
 
 class CProcesseur
 {
@@ -162,9 +164,18 @@ int main(int nbr, char ** fileName)
 
 	CPU.setPC(0);
 	CPU.setRegistre(0);
-
-	while (CPU.retState() == 'E')
-		CPU.run();
+	
+	while (!CheckIfAllProcessusCompleted()) 
+	{
+		int processusID = ordonnanceur->ChooseProcessus(processus);
+		for (int i = 0; i < 2; i++)
+		{
+			if (CPU.retState() != 'E')
+			{
+				CPU.run();
+			}
+		}
+	}
 
 	cout << "fin normal" << endl;
 
@@ -186,3 +197,11 @@ void loadProgram(char* fileName)
 	}
 	file.close();
 }
+
+bool CheckIfAllProcessusCompleted()
+{
+	for (int i = 0; i < processus.size(); i++)
+		if (processus.at(i)->GetState() != 'E') return false;
+
+	return true;
+} 

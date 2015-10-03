@@ -35,7 +35,10 @@ public:
 	void setPC(CHAR pc) { PC = pc; }
 	void setState(CHAR state) { State = state; }
 	void setPriorite(int priorite) { Priorite = priorite; }
+	void AddToPriorite(int var) { Priorite += var;}
 
+	int GetPriorite() {return Priorite;}
+	CHAR GetState() {return State;}
 
 	void eraseMemoryChanges();
 
