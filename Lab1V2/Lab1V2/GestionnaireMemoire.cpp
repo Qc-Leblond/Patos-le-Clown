@@ -34,13 +34,35 @@ void GestionnaireMemoire::putMemoryOnDiskFrom(string processFilename, string dis
 	return;
 }
 
-void GestionnaireMemoire::updateProcessMemoryOnDisk(string diskFilename, Processus* process)
+void GestionnaireMemoire::updateProcessMemoryOnDisk(string diskFilename, Processus* process, int processID)
 {
+	//read disk to vector
+	fstream disque;
+	disque.open(diskFilename, ios::in);
+	vector<CHAR> diskContent;
+	int processPosition = processID * 32;
+	while (!disque.eof())
+	{
+		CHAR line;
+		disque >> line;
+		diskContent.push_back(line);
+	}
+
+	//make modifications
 	vector<memoryTuple> memChanges = process->getChangementsMemoire();
 	for (int i = 0; i < memChanges.size(); i++)
 	{
-
+		diskContent[memChanges[i].indice + processPosition] = memChanges[i].valeur;
 	}
+
+	//write to disk from vector
+	int indice = 0;
+	while (!disque.eof())
+	{
+		disque << diskContent[indice];
+		indice++;
+	}
+	disque.close();
 	return;
 }
 
@@ -65,9 +87,5 @@ void GestionnaireMemoire::updateProcessMemoryModifications(string processFilenam
 		}
 	}
 	file.close();
-
-
-
-
 	return;
 }

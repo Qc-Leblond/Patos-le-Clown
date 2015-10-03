@@ -21,7 +21,7 @@ public:
 	void putMemoryOnDiskFrom(string processFilename, string diskFilename, int memorySize);
 
 	//Update the memory that has changed in the process on the disk
-	void updateProcessMemoryOnDisk(string diskFilename, Processus* process);
+	void updateProcessMemoryOnDisk(string diskFilename, Processus* process, int processID);
 
 	//Detects modifications to a process' memory and add them to the process' memory changes
 	void updateProcessMemoryModifications(string processFilename, Processus process, CHAR* RAM);
