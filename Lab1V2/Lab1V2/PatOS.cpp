@@ -117,7 +117,7 @@ public:
 
 
 // Prototype des fonctions
-void loadProgram(char* fileName, string diskName);
+void loadProgram(char* fileName, string diskName, int processusID);
 bool CheckIfAllProcessusCompleted();
 
 
@@ -160,7 +160,7 @@ int main(int nbr, char ** fileName)
 	while (!CheckIfAllProcessusCompleted()) 
 	{
 		int processusID = ordonnanceur->ChooseProcessus(processus);
-		loadProgram(fileName[processusID+1], diskFilename);
+		loadProgram(fileName[processusID+1], diskFilename, processusID);
 		CPU.setPC(processus[processusID]->getPC());
 		CPU.setRegistre(processus[processusID]->getRegistre());
 
@@ -172,7 +172,7 @@ int main(int nbr, char ** fileName)
 			}
 		}
 		//update the process' memory
-		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID]);
+		gestionnaireMemoire->updateProcessMemoryOnDisk(diskFilename, processus[processusID], processusID);
 
 		processus[processusID]->setPC(CPU.retPC());
 		processus[processusID]->setRegistre(CPU.retRegistre());
