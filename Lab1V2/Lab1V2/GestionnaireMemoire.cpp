@@ -39,34 +39,34 @@ void GestionnaireMemoire::updateProcessMemoryOnDisk(string diskFilename, Process
 	//read disk to vector
 	fstream disque;
 	disque.open(diskFilename, ios::in);
-	vector<CHAR> diskContent;
+	vector<string> diskContent;
 	int processPosition = processID * 32;
 	while (!disque.eof())
 	{
-		CHAR line;
+		string line = "";
 		disque >> line;
 		diskContent.push_back(line);
 	}
+	disque.close();
 
 	//make modifications
 	vector<memoryTuple> memChanges = process->getChangementsMemoire();
 	for (int i = 0; i < memChanges.size(); i++)
 	{
-		diskContent[memChanges[i].indice + processPosition] = memChanges[i].valeur;
+		diskContent[memChanges[i].indice + 32 * processID] = to_string(memChanges[i].valeur);
 	}
 
 	//write to disk from vector
-	int indice = 0;
-	while (!disque.eof())
+	disque.open(diskFilename, ios::out);
+	for (int i = 0; i < diskContent.size(); i++)
 	{
-		disque << diskContent[indice];
-		indice++;
+		disque << diskContent[i] << endl;
 	}
 	disque.close();
 	return;
 }
 
-void GestionnaireMemoire::updateProcessMemoryModifications(string processFilename, Processus process, CHAR* RAM)
+void GestionnaireMemoire::updateProcessMemoryModifications(string processFilename, Processus* process, CHAR* RAM)
 {
 	ifstream file;
 	file.open(processFilename, ios::in);
@@ -74,16 +74,19 @@ void GestionnaireMemoire::updateProcessMemoryModifications(string processFilenam
 	int lineCount = 0;
 	for (int j = 0; j < 64; j++)
 	{
-		CHAR line;
+		int line;
 		file >> line;
 		//skip the first 32 lines (the instructions)
+		int indice = 0;
 		if (j >= 32)
 		{
-			if (line != RAM[j])
+			int test = (int)RAM[j];
+			if (line != (int)RAM[j])
 			{
 				//add a memory change to the process
-				process.setChangementMemoire(j, RAM[j]);
+				process->setChangementMemoire(indice, RAM[j]);
 			}
+			indice++;
 		}
 	}
 	file.close();

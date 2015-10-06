@@ -10,11 +10,8 @@ void Processus::eraseMemoryChanges()
 
 /**
 * Retrieves the memory changes before/after next/last swap
-* TODO: from instructions or from memory directly?
-* Would be more efficient from instructions, but also more complex...
-* needs to be able to take any length of memory, from 32B to 4GB
 */
-void Processus::setChangementMemoire(int _indice, CHAR _valeur) //TODO: take next instructions as param instead?
+void Processus::setChangementMemoire(int _indice, CHAR _valeur)
 {
 	eraseMemoryChanges();
 	memoryTuple memChange;
